@@ -2,7 +2,6 @@ create database bd_tcc;
 use bd_tcc;
 drop database bd_tcc;
 
-#Guilherme 
 create table tbl_cadastro_aluno(
 id int primary key auto_increment,
 RM varchar(7) not null unique,
@@ -33,7 +32,6 @@ drop table tbl_curso_prof;
 
 drop table tbl_cadastro_aluno;
 
-#Kenny
 create table tbl_curso(
 id int primary key auto_increment,
 curso varchar(35) not null,
@@ -52,9 +50,6 @@ tipo enum("coordenador_pedagogico", "secretaria", "coordenador_curso", "professo
 
 select * from tbl_type;
 drop table tbl_type;
-
-                            
-                            
                             
 CREATE TABLE tbl_usuario (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -72,23 +67,6 @@ select * from tbl_usuario;
 
 drop table tbl_usuario;
 
-#Guilherme
-#create table tbl_login_professor(
-#id int primary key auto_increment,
-#RM int(7) unique,
-#CPF varchar(11) not null unique,
-#nome varchar(50) not null,
-#email varchar(50) not null unique,
-#senha varchar(20) not null,
-#createAt datetime not null default CURRENT_TIMESTAMP,
-#deletedAt datetime 
-#);
-#select * from tbl_login_professor;
-
-#truncate table tbl_login_professor;
-#drop table tbl_login_professor;
-
-#Kenny
 create table tbl_endereco(
 id int primary key auto_increment,
 CEP int not null,
@@ -106,7 +84,6 @@ deletedAt datetime
 );
 drop table tbl_endereco;
 
-#Guilherme
 create table tbl_responsavel(
 id int primary key auto_increment,
 CPF varchar(11) not null unique,
@@ -122,7 +99,6 @@ deletedAt datetime
 select * from tbl_responsavel;
 drop table tbl_responsavel;
 
-#Kenny 
 CREATE TABLE tbl_dadosMedicos(
 	id int primary key auto_increment,
     sexo ENUM('feminino', 'masculino'),
@@ -151,7 +127,6 @@ CREATE TABLE tbl_dadosMedicos(
 );
 drop table tbl_dadosMedicos;
 
-#Guilherme 
 CREATE TABLE tbl_alergias (
 	id int primary key auto_increment,
 	alergias enum('sim','não') not null,
@@ -162,7 +137,6 @@ insert into tbl_alergias value(default, 'não', default);
 
 drop table tbl_alergias;
 
-#Kenny
 CREATE TABLE  tbl_diagnostica(
 	id int primary key,
     diagnostico ENUM('sim', 'não') not null,
@@ -170,7 +144,6 @@ CREATE TABLE  tbl_diagnostica(
 );
 drop table tbl_diagnostica;
     
-#Guilherme
 CREATE TABLE tbl_deficiencias(
 	id int primary key auto_increment,
     deficiencia ENUM('sim', 'não') not null,
@@ -180,7 +153,6 @@ select * from tbl_deficiencias;
 
 drop table tbl_deficiencias;
  
- #Kenny
 CREATE TABLE tbl_restricoes(
 	id int primary key,
     restri_alimentar ENUM('sim', 'não') not null,
@@ -188,7 +160,6 @@ CREATE TABLE tbl_restricoes(
 );
 drop table tbl_restricoes;
 
-#Guilherme 
 CREATE TABLE tbl_cirurgias(
 	id int primary key auto_increment,
     internacao_cirurgia ENUM('sim', 'não') not null,
@@ -198,7 +169,6 @@ CREATE TABLE tbl_cirurgias(
 select * from tbl_cirurgias;	
 drop table tbl_cirurgias;
     
-#Kenny
 CREATE TABLE tbl_medicamentos(
 	id int primary key auto_increment,
     medicamento ENUM('sim', 'não') not null,
