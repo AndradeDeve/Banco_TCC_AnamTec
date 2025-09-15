@@ -1,79 +1,35 @@
-	create database bd_tcc;
-	use bd_tcc;
-	drop database bd_tcc;
-
-	create table tbl_cadastro_aluno(
-	id int primary key auto_increment,
-	RM varchar(7) not null unique,
-	nome varchar(50) not null,
-	data_nasc date not null,
-	genero enum( "Feminino", "Masculino", "Não Binario", "Prefiro não informar", "Outros") not null,
-	email varchar(50) not null unique,
-	telefone varchar(15) not null unique,
-	id_curso int, 
-	id_responsavel int,
-	id_endereco int, 
-	createAt datetime not null default CURRENT_TIMESTAMP,	
-	deletedAt datetime,
-	foreign key (id_responsavel) references tbl_responsavel(id),
-	foreign key (id_endereco) references tbl_endereco(id),
-	foreign key (id_curso) references tbl_curso(id)
-	);
-	drop table tbl_cadastro_aluno;
-	select * from tbl_cadastro_aluno;	
-
-	create table tbl_curso_prof(
-	id_professor int,
-	id_curso int,
-	foreign key (id_curso) references tbl_curso(id)
-	);
+create database bd_tcc;
+use bd_tcc;
     
-	alter table tbl_curso_prof
-    add constraint fk_professor
-    foreign key(id_professor) references tbl_usuario(id);
+    /* TABELAS SEM CHAVES ESTRANGEIRAS*/
     
-	drop table tbl_curso_prof;
-
-	drop table tbl_cadastro_aluno;
-
-	create table tbl_curso(
+    create table tbl_curso(
 	id int primary key auto_increment,
 	curso varchar(35) not null,
 	turno enum( "manhã", "tarde", "noite") not null,
 	semestre int not null,
 	modalidade enum( "presencial", "hibrido", "ead") not null,
 	createAt datetime not null default CURRENT_TIMESTAMP,
-	deletedAt datetime 
+	deletedAt datetime
 	);
-	drop table tbl_curso;
-
-	create table tbl_type (
+	
+    create table tbl_type (
 	id int primary key auto_increment,
-	tipo enum("coordenador_pedagogico", "secretaria", "coordenador_curso", "professor")
+	tipo enum("coordenador pedagógico", "secretaria", "coordenador de curso", "professor")
 	);
-
-	select * from tbl_type;
-	drop table tbl_type;
-								
-	CREATE TABLE tbl_usuario (
+    
+    CREATE TABLE tbl_usuario (
 		id INT PRIMARY KEY AUTO_INCREMENT,
+        RM VARCHAR(15),
 		CPF VARCHAR(11) NOT NULL,
 		nome VARCHAR(50) NOT NULL,
 		email VARCHAR(50) NOT NULL,
 		senha VARCHAR(60) NOT NULL, -- bcrypt hash
-		id_type INT,
-		id_curso INT,
 		createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-		deletedAt DATETIME,
-		FOREIGN KEY (id_type) REFERENCES tbl_type(id),
-		FOREIGN KEY (id_curso) REFERENCES tbl_curso_prof(id_curso)
-	);
-
-	select * from tbl_usuario;
-
-	drop table tbl_usuario;
-
-	create table tbl_endereco(
+		deletedAt DATETIME
+	);	
+    
+    create table tbl_endereco(
 	id int primary key auto_increment,
 	CEP int not null,
 	logradouro varchar(50) not null,
@@ -88,9 +44,8 @@
 	createAt datetime not null default CURRENT_TIMESTAMP,
 	deletedAt datetime
 	);
-	drop table tbl_endereco;
-
-	create table tbl_responsavel(
+    
+    create table tbl_responsavel(
 	id int primary key auto_increment,
 	CPF varchar(11) not null unique,
 	nome varchar(50) not null,
@@ -102,10 +57,81 @@
 	createAt datetime not null default CURRENT_TIMESTAMP,
 	deletedAt datetime
 	);
-	select * from tbl_responsavel;
-	drop table tbl_responsavel;
+    
+    CREATE TABLE tbl_alergias (
+		id int primary key auto_increment,
+		alergias enum('sim','não') not null,
+		tp_alergia varchar(200)
+	);
+    
+    CREATE TABLE  tbl_diagnostica(
+		id int primary key auto_increment,
+		diagnostico ENUM('sim', 'não') not null,
+		tp_diag VARCHAR(200)
+	);
+    
+    CREATE TABLE tbl_deficiencias(
+		id int primary key auto_increment,
+		deficiencia ENUM('sim', 'não') not null,
+		tp_defi VARCHAR(200)
+	);
+    
+    CREATE TABLE tbl_restricoes(
+		id int primary key auto_increment,
+		restri_alimentar ENUM('sim', 'não') not null,
+		tp_restricao VARCHAR(200)
+	);
+    
+    CREATE TABLE tbl_dificuldades_educacionais (
+    id int primary key auto_increment,
+    dificuldades ENUM("sim","não") not null,
+    tp_dificuldades varchar(200)
+    );
 
-	CREATE TABLE tbl_dadosMedicos(
+    CREATE TABLE registros_aulas (
+    id int primary key auto_increment,
+    comentario varchar(1000) not null,
+    id_professor int not null,
+    createdAt datetime default current_timestamp,
+    deletedAt datetime
+    );
+    
+    CREATE TABLE tbl_medicamentos(
+		id int primary key auto_increment,
+		medicamento ENUM('sim', 'não') not null,
+		tp_medi VARCHAR(200)
+	);
+    
+    CREATE TABLE tbl_cirurgias(
+		id int primary key auto_increment,
+		internacao_cirurgia ENUM('sim', 'não') not null,
+		tp_cirurgia VARCHAR(200)
+	);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* TABELAS COM CHAVES ESTRANGEIRAS */
+	create table tbl_cadastro_al(
+	id int primary key auto_increment,
+	ra varchar(15) not null unique,
+	nome varchar(50) not null,
+	data_nasc date not null,
+	genero enum( "Feminino", "Masculino", "Não Binario", "Prefiro não informar", "Outros") not null,
+	email varchar(50) not null unique,
+	telefone varchar(15) not null unique,
+    id_endereco int not null,
+	createAt datetime not null default CURRENT_TIMESTAMP,
+	deletedAt datetime ,
+    foreign key (id_endereco) references tbl_endereco(id)
+);
+
+CREATE TABLE tbl_dadosMedicos(
 		id int primary key auto_increment,
 		sexo ENUM('feminino', 'masculino'),
 		tp_sangue ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'),
@@ -124,63 +150,113 @@
 		id_restricoes int not null,
 		id_cirurgias int not null,
 		id_medicamentos int not null,
+        id_aluno int,
+        id_dificuldades int,
+        foreign key (id_aluno) references tbl_cadastro_al(id),
 		foreign key (id_medicamentos) references tbl_medicamentos(id),
 		foreign key (id_cirurgias) references tbl_cirurgias(id),
 		foreign key (id_restricoes) references tbl_restricoes(id),
 		foreign key (id_deficiencias) references tbl_deficiencias(id),
 		foreign key (id_diagnostico) references tbl_diagnostica(id),
-		foreign key (id_alergias) references tbl_alergias(id)
-	);
-	drop table tbl_dadosMedicos;
-
-	CREATE TABLE tbl_alergias (
-		id int primary key auto_increment,
-		alergias enum('sim','não') not null,
-		tp_alergia varchar(200)
-	);
-	select * from tbl_alergias;
-	insert into tbl_alergias value(default, 'não', default);
-
-	drop table tbl_alergias;
-
-	CREATE TABLE  tbl_diagnostica(
-		id int primary key,
-		diagnostico ENUM('sim', 'não') not null,
-		tp_diag VARCHAR(200)
-	);
-	drop table tbl_diagnostica;
-		
-	CREATE TABLE tbl_deficiencias(
-		id int primary key auto_increment,
-		deficiencia ENUM('sim', 'não') not null,
-		tp_defi VARCHAR(200)
-	);
-	select * from tbl_deficiencias;	
-
-	drop table tbl_deficiencias;
-	 
-	CREATE TABLE tbl_restricoes(
-		id int primary key,
-		restri_alimentar ENUM('sim', 'não') not null,
-		tp_restricao VARCHAR(150)
-	);
-	drop table tbl_restricoes;
-
-	CREATE TABLE tbl_cirurgias(
-		id int primary key auto_increment,
-		internacao_cirurgia ENUM('sim', 'não') not null,
-		tp_cirurgia VARCHAR(200)
-	);
-
-	select * from tbl_cirurgias;	
-	drop table tbl_cirurgias;
-		
-	CREATE TABLE tbl_medicamentos(
-		id int primary key auto_increment,
-		medicamento ENUM('sim', 'não') not null,
-		tp_medi VARCHAR(200)
-	);	
-	drop table tbl_medicamentos;
-		
-	select * from tbl_cadastro_aluno;
+		foreign key (id_alergias) references tbl_alergias(id),
+        foreign key (id_dificuldades) references tbl_dificuldades_educacionais(id)
+	);            
+	
 	truncate table tbl_cadastro_aluno;	
+    
+	
+    
+    /*N-Ns*/
+    
+    CREATE TABLE juncao_al_responsaveis(
+    id_aluno int not null,
+    id_responsaveis int not null,
+    foreign key (id_aluno) references tbl_cadastro_al(id),
+    foreign key (id_responsaveis) references tbl_responsavel(id)
+    );
+    
+    CREATE TABLE juncao_al_curso(
+    id_aluno int not null,
+    id_curso int not null,
+    foreign key (id_aluno) references tbl_cadastro_al(id),
+    foreign key (id_curso) references tbl_curso(id)
+    );
+    
+    create table juncao_curso_user(
+    id_curso int not null,
+    id_user int not null,
+    foreign key (id_curso) references tbl_curso(id),
+    foreign key (id_user) references tbl_usuario(id)
+    );
+    
+    create table juncao_type_user(
+    id_type int not null,
+    id_user int not null,
+    foreign key (id_type) references tbl_type(id),
+    foreign key (id_user) references tbl_usuario(id)
+    );
+    
+    create table juncao_registros_user(
+    id_registro_aula int not null,
+    id_user int not null,
+    foreign key (id_registro_aula) references registros_aulas(id),
+    foreign key (id_user) references tbl_usuario(id)
+    );
+    
+    create table juncao_registros_al(
+    id_registro_aula int not null,
+	id_aluno int not null,
+    foreign key (id_registro_aula) references registros_aulas(id),
+    foreign key (id_aluno) references tbl_cadastro_al(id)
+    );
+    
+    
+    
+    
+    /*SELECTs*/
+    
+select * from juncao_al_curso;
+select * from juncao_al_responsaveis;
+select * from juncao_curso_user;
+select * from juncao_registros_al;
+select * from juncao_registros_user;
+select * from juncao_type_user;
+select * from registros_aulas;
+select * from tbl_alergias;
+select * from tbl_cadastro_al;
+select * from tbl_cirurgias;
+select * from tbl_curso;
+select * from tbl_dadosMedicos;
+select * from tbl_deficiencias;
+select * from tbl_diagnostica;
+select * from tbl_endereco;
+select * from tbl_medicamentos;
+select * from tbl_responsavel;
+select * from tbl_resticoes;
+select * from tbl_type;
+select * from tbl_usuario;
+
+    
+    
+    /* DROPS*/
+drop database bd_tcc;
+drop table juncao_al_curso;
+drop table juncao_al_responsavel;
+drop table juncao_curso_user;
+drop table juncao_registros_al;
+drop table juncao_registros_user;
+drop table juncao_type_user;
+drop table tbl_medicamentos;
+drop table tbl_cirurgias;
+drop table tbl_restricoes;
+drop table tbl_deficiencias;
+drop table tbl_diagnostica;
+drop table tbl_alergias;
+drop table tbl_dadosMedicos;
+drop table tbl_responsavel;
+drop table tbl_endereco;
+drop table tbl_usuario;
+drop table tbl_type;
+drop table tbl_cadastro_al;
+drop table tbl_curso;
+drop table registros_aulas;
