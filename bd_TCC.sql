@@ -29,7 +29,8 @@ CREATE TABLE tbl_usuario (
 	CPF VARCHAR(11) NOT NULL,
 	nome VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	senha VARCHAR(60) NOT NULL, -- bcrypt hash
+	senha VARCHAR(60) NOT NULL,
+    disciplina varchar(35),
 	createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
 	deletedAt DATETIME
 );	
@@ -208,6 +209,8 @@ create table juncao_registros_al(
 	foreign key (id_aluno) references tbl_cadastro_al(id)
 );
     
+    
+    ;
     
     /*SELECTs*/
     #SELECT * FROM tbl_al_curso WHERE id_aluno =  AND deletedAt IS NULL;
