@@ -220,6 +220,7 @@ select * from tbl_dificuldades_educacionais;
     /* DROPS*/
     
 drop database bd_tcc;
+
 #adicionar
 drop table juncao_al_curso;
 drop table juncao_al_responsavel;
